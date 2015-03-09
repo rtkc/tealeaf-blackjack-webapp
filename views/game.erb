@@ -1,0 +1,67 @@
+<div id="game">
+  <%if @lose %>
+    <div class="alert alert-error"><%=@lose%></div>
+  <% end %>
+  <%if @win %>
+    <div class="alert alert-success"><%=@win%></div>
+  <% end %>
+
+  <h3> Welcome to Blackjack <%= session[:player_name] %> </h3>
+
+  <% if @play_again %>
+    <p>
+      <strong>Play again?</strong>
+      <a href="/bet" class="btn btn-primary">Yes</a>
+      <a href="/game_over" class="btn"> No</a>
+    </p>
+  <% end %>
+
+  <div class="well">
+    <h4>Dealer's cards:</h4>
+    <% session[:dealer_cards].each_with_index do |card, i| %>
+      <% if session[:turn] != "dealer" && i == 0 %>
+        <img src="/images/cards/cover.jpg">
+      <% else %>
+        <%= display_cards(card) %>
+      <% end %>
+    <% end %>
+
+      <%if @show_dealer_button %>
+        <p>
+          <h3> Dealer's total: <%= sum_of_cards(session[:dealer_cards])%>.</h3>
+          <form id="dealer_hit_form" action='/game/dealer/hit' method='post'>
+            <input type='submit' class='btn btn-primary' value ="Click to see dealer's next card">
+          </form>
+        </p>
+      <% end %>
+  </div>
+
+  <div class="well" id="player_cards">
+    <p> Your pot is $<%= session[:player_pot] %>.You have bet $<%= session[:player_bet]%>. </p>
+    <p>Player's cards:</p>
+      <% session[:player_cards].each do |card| %>
+        <%= display_cards(card) %> 
+      <% end %>
+  </div>
+
+  <br/>
+
+  <% if session[:turn] == "dealer" %>
+    <p>This is dealer's total: <%= sum_of_cards(session[:dealer_cards])%>. </p>
+  <% end %>
+  <p>This is your total: <%= sum_of_cards(session[:player_cards])%>. </p>
+  <p> Would you like to hit or stay?</p>
+
+  <% if @show_hit_stay_buttons %> 
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <form id="hit_form" action='/game/player/hit' method='post'>
+          <input type="submit" class="btn btn-success" value="hit"/>
+        </form>
+        <form id="stay_form" action='/game/player/stay' method='post'>
+          <input type="submit" class="btn btn-warning" value="stay" />
+        </form>
+      </div>
+    </div>
+  <% end %>
+</div>

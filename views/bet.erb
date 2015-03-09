@@ -1,0 +1,7 @@
+<h3> Welcome <%= session[:player_name] %> </h3>
+<form action='/bet' method='post'>
+  <h3> How much would you like to bet? </h3>
+  <p> You currently have $<%= session[:player_pot].to_i%> </p>
+  <input type="text" name="bet_amount"/>
+  <input type="submit" class='btn'/>
+</form>
